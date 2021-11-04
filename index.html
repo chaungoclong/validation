@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div>
+		<button id="test">TEST</button>
+	</div>
+	<div class="container-fluid">
+		<div class="row d-flex justify-content-center">
+			<div class="col-md-5">
+				<div class="card">
+					<div class="card-body">
+						<form action="" id="form1" method="get">
+							<div class="form-group">
+								<label for="name">Name</label>
+								<input type="text" name="name" class="form-control" id="name" rules="required|min_length:5">
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="text" name="email" class="form-control" id="email"rules="required|max_length:100|email">
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
+								<label for="mark">Mark</label>
+								<input type="text" name="mark" class="form-control" id="mark"rules="required|is_number|min:0|max:10">
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
+								<label for="password">Password</label>
+								<input type="text" name="password" class="form-control" id="password"rules="required|password">
+								<div class="msg"></div>
+							</div>
+
+							<button class="btn btn-success">SUBMIT</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="main.js"></script>
+	<script type="text/javascript">
+		let x = new Validate("#form1", {
+			wrapInput: {
+				selector: ".form-group",
+			},
+			message: {
+				selector: ".msg",
+				whenError: "alert alert-danger"
+			},
+			onSubmit: function() {
+				console.log(this.formElement);
+			}
+		});
+
+		
+
+	</script>
+</body>
+</html>
