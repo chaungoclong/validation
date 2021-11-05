@@ -1,0 +1,13 @@
+{
+    "name": "long/simple-form-validation",
+    "description": "simple form validation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "long",
+            "email": "chaungoclong2411@gmail.com"
+        }
+    ],
+    "require": {}
+}
