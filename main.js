@@ -3,14 +3,16 @@ function Validate(formSelector, option = {}) {
 	this.formElement = $(formSelector);
 
 	// input element
-	this.inputElements = this.formElement.find("[name][rules]");
+	this.inputElements = this.formElement.find(":input[name][rules][type!='button'][type!='submit']");
 
 	// message
 
 
 	// rule
 	this.validationRule = {
-		required: (value) => {
+		required: (inputElement) => {
+			let value = $(inputElement).val();
+
 			if (typeof value !== "string" || value.length === 0) {
 				return "khong duoc de trong";
 			}
@@ -19,7 +21,9 @@ function Validate(formSelector, option = {}) {
 		},
 
 		min_length: (minLength) => {
-			return (value) => {
+			return (inputElement) => {
+				let value = $(inputElement).val();
+
 				if (typeof value !== "string") {
 					return undefined;
 				}
@@ -29,7 +33,9 @@ function Validate(formSelector, option = {}) {
 		},
 
 		max_length: (maxLength) => {
-			return (value) => {
+			return (inputElement) => {
+				let value = $(inputElement).val();
+
 				if (typeof value !== "string") {
 					return undefined;
 				}
@@ -38,12 +44,16 @@ function Validate(formSelector, option = {}) {
 			}
 		},
 
-		is_number: (value) => {
+		is_number: (inputElement) => {
+			let value = $(inputElement).val();
+
 			return ! isNaN(value) ? undefined : `${value} khong phai la so`;
 		},
 
 		min: (min) => {
-			return (value) => {
+			return (inputElement) => {
+				let value = $(inputElement).val();
+
 				if (typeof value !== "string" || isNaN(value) || isNaN(min)) {
 					return undefined;
 				}
@@ -53,7 +63,9 @@ function Validate(formSelector, option = {}) {
 		},
 
 		max: (max) => {
-			return (value) => {
+			return (inputElement) => {
+				let value = $(inputElement).val();
+
 				if (typeof value !== "string" || isNaN(value) || isNaN(max)) {
 					return undefined;
 				}
@@ -62,7 +74,22 @@ function Validate(formSelector, option = {}) {
 			}
 		},
 
-		email: (value) => {
+		between: (min, max) => {
+			return (inputElement) => {
+				let value = $(inputElement).val();
+
+				if (typeof value !== "string" || isNaN(value) || isNaN(max) 
+					|| isNaN(min)) {
+					return undefined;
+				}
+
+				return (value >= min && value <= max) ? undefined : `phai nam trong khoang tu ${min} - ${max}`;
+			}
+		},
+
+		email: (inputElement) => {
+			let value = $(inputElement).val();
+
 			if (typeof value !== "string") {
 				return undefined;
 			}
@@ -72,7 +99,9 @@ function Validate(formSelector, option = {}) {
 			return regex.test(value) ? undefined : "email sai dinh dang";
 		},
 
-		password: (value) => {
+		password: (inputElement) => {
+			let value = $(inputElement).val();
+
 			if (typeof value !== "string") {
 				return undefined;
 			}
@@ -81,6 +110,40 @@ function Validate(formSelector, option = {}) {
 
 			return regex.test(value) ? undefined : "mat khau sai dinh dang";
 		},
+
+		checked: (inputElement) => {
+			let name = inputElement.name;
+
+			if ($(`:input[name='${name}']:checked`)[0] !== undefined) {
+				return undefined;
+			}
+
+			return "chua chon";
+		},
+
+		phone: (inputElement) => {
+			let value = $(inputElement).val();
+
+			if (typeof value !== "string") {
+				return undefined;
+			}
+
+			let regex =  /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
+
+			return regex.test(value) ? undefined : "khong phai la so dien thoai";
+		},
+
+		dob: (inputElement) => {
+			let value = $(inputElement).val();
+
+			if (typeof value !== "string") {
+				return undefined;
+			}
+
+			let regex = /^((0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-](19[0-9]{2}|2[0-9]{3}))|((0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-](19[0-9]{2}|2[0-9]{3}))|((19[0-9]{2}|2[0-9]{3})[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01]))$/;
+
+			return regex.test(value) ? undefined : "ngay sinh khong hop le";
+		}
 	}
 
 	// map input with rule
@@ -138,7 +201,14 @@ function Validate(formSelector, option = {}) {
 
 				if (rule.includes(":")) {
 					let ruleArr = rule.split(":");
-					ruleFunc = this.validationRule[ruleArr[0]](ruleArr[1]);
+					
+					if (ruleArr.length === 2) {
+						ruleFunc = this.validationRule[ruleArr[0]](ruleArr[1]);
+					}
+
+					if (ruleArr.length === 3) {
+						ruleFunc = this.validationRule[ruleArr[0]](ruleArr[1], ruleArr[2]);
+					}
 				}
 
 				if (Array.isArray(this.mapInputWithRule[inputName])) {
@@ -271,7 +341,7 @@ function Validate(formSelector, option = {}) {
 		let errorMsg = undefined;
 
 		for (let validFunct of validFunctOfInputs) {
-			errorMsg = validFunct($(inputElement).val());
+			errorMsg = validFunct(inputElement);
 
 			if (errorMsg !== undefined) { 
 				this.isValid = false;
@@ -305,10 +375,14 @@ function Validate(formSelector, option = {}) {
 	this.validateOnInput = () => {
 		$(this.inputElements).each((k, v) => {
 			$(document).on("input", v, (e) => {
-				if ($(v).is($(e.target))) {
+				let type = v.type;
+				let tagName = $(v).prop("tagName");
+
+				if ($(v).is($(e.target)) && type !== "radio" 
+					&& type !== "checkbox" && tagName !== "SELECT") {
 					this.validateForInput(v);
-				}
-			});
+			}
+		});
 		});
 	}
 

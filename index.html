@@ -26,20 +26,83 @@
 							</div>
 
 							<div class="form-group">
+								<label for="phone">Phone</label>
+								<input type="text" name="phone" class="form-control" id="phone" rules="required|max_length:10|phone">
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
 								<label for="email">Email</label>
 								<input type="text" name="email" class="form-control" id="email"rules="required|max_length:100|email">
 								<div class="msg"></div>
 							</div>
 
 							<div class="form-group">
+								<label for="dob">DOB</label>
+								<input type="text" name="dob" class="form-control" id="dob" rules="required|dob">
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
 								<label for="mark">Mark</label>
-								<input type="text" name="mark" class="form-control" id="mark"rules="required|is_number|min:0|max:10">
+								<input type="text" name="mark" class="form-control" id="mark"rules="required|is_number|between:0:10">
 								<div class="msg"></div>
 							</div>
 
 							<div class="form-group">
 								<label for="password">Password</label>
 								<input type="text" name="password" class="form-control" id="password"rules="required|password">
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="checkbox" class="form-check-input" value="1" name="check[]" rules="checked">Option 1
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="checkbox" class="form-check-input" value="2" name="check[]">Option 2
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="checkbox" class="form-check-input" value="3" name="check[]">Option 3
+									</label>
+								</div>
+
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
+								<label for="select">Select list:</label>
+								<select class="form-control" id="select" name="select[]" multiple>
+									<option disabled>choose</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="optradio" value="1" rules="checked">Option 1
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="optradio" value="2">Option 2
+									</label>
+								</div>
+								<div class="form-check disabled">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="optradio" value="3">Option 3
+									</label>
+								</div>
+
 								<div class="msg"></div>
 							</div>
 
@@ -66,7 +129,16 @@
 			}
 		});
 
-		
+		// $("#form1").on("submit", function(e) {
+		// 	e.preventDefault();
+
+		// 	console.log($(this).serializeArray());
+		// 	// console.log($('[name="select[]"]').val());
+		// 	// console.log($('[name="optradio"]:checked').val());
+		// 	// console.log($(this).find("[name='mark']:checked")['length']);
+		// 	// console.log($(":input[name][rules][type!='button'][type!='submit']"));
+		// 	console.log($(":input[name='select[]']").val());
+		// })
 
 	</script>
 </body>
