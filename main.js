@@ -47,7 +47,7 @@ function Validate(formSelector, option = {}) {
 		is_number: (inputElement) => {
 			let value = $(inputElement).val();
 
-			return ! isNaN(value) ? undefined : `${value} khong phai la so`;
+			return !isNaN(value) ? undefined : `${value} khong phai la so`;
 		},
 
 		min: (min) => {
@@ -78,7 +78,7 @@ function Validate(formSelector, option = {}) {
 			return (inputElement) => {
 				let value = $(inputElement).val();
 
-				if (typeof value !== "string" || isNaN(value) || isNaN(max) 
+				if (typeof value !== "string" || isNaN(value) || isNaN(max)
 					|| isNaN(min)) {
 					return undefined;
 				}
@@ -128,7 +128,7 @@ function Validate(formSelector, option = {}) {
 				return undefined;
 			}
 
-			let regex =  /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
+			let regex = /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
 
 			return regex.test(value) ? undefined : "khong phai la so dien thoai";
 		},
@@ -172,7 +172,7 @@ function Validate(formSelector, option = {}) {
 	// init
 	this.init = () => {
 		// set wrapInput ,message element and onSubmit function
-		if (! $.isEmptyObject(option)) {
+		if (!$.isEmptyObject(option)) {
 			if ("wrapInput" in option) {
 				Object.assign(this.wrapInput, option.wrapInput);
 				console.log(this.wrapInput);
@@ -201,7 +201,7 @@ function Validate(formSelector, option = {}) {
 
 				if (rule.includes(":")) {
 					let ruleArr = rule.split(":");
-					
+
 					if (ruleArr.length === 2) {
 						ruleFunc = this.validationRule[ruleArr[0]](ruleArr[1]);
 					}
@@ -221,7 +221,7 @@ function Validate(formSelector, option = {}) {
 	}
 
 	// get display field
-	this.getDisplayElement = (inputElement, type="success") => {
+	this.getDisplayElement = (inputElement, type = "success") => {
 		let wrapInputSelector = this.wrapInput.selector;
 		let messageSelector = this.message.selector;
 
@@ -235,7 +235,7 @@ function Validate(formSelector, option = {}) {
 			wrapInputElement = $(inputElement).closest(wrapInputSelector);
 
 			messageElement = $(inputElement).closest(wrapInputSelector)
-			.find(messageSelector)[0];
+				.find(messageSelector)[0];
 
 			messageElement = $(messageElement);
 
@@ -243,7 +243,7 @@ function Validate(formSelector, option = {}) {
 			wrapInputElement = null;
 
 			messageElement = $(inputElement).nextAll()
-			.filter(messageSelector)[0];
+				.filter(messageSelector)[0];
 
 			messageElement = $(messageElement);
 
@@ -282,20 +282,20 @@ function Validate(formSelector, option = {}) {
 
 	// display error
 	this.displayError = (inputElement, errorMsg) => {
-		let displayElements  = this.getDisplayElement(inputElement, "error");
+		let displayElements = this.getDisplayElement(inputElement, "error");
 
 		let wrapInputElement = displayElements.wrapInputElement;
-		let messageElement   = displayElements.messageElement;
+		let messageElement = displayElements.messageElement;
 
 		if (wrapInputElement !== null) {
 			wrapInputElement.removeClass(this.wrapInput.whenSuccess)
-			.addClass(this.wrapInput.whenError);
+				.addClass(this.wrapInput.whenError);
 		}
 
 		if (messageElement !== null) {
 			messageElement.removeClass(this.message.whenSuccess)
-			.addClass(this.message.whenError)
-			.html(errorMsg);
+				.addClass(this.message.whenError)
+				.html(errorMsg);
 		}
 	}
 
@@ -303,19 +303,19 @@ function Validate(formSelector, option = {}) {
 	this.displaySuccess = (inputElement) => {
 		let displayElements = this.getDisplayElement(inputElement, "success");
 
-		let wrapInputElement  = displayElements.wrapInputElement;
-		let messageElement    = displayElements.messageElement;
+		let wrapInputElement = displayElements.wrapInputElement;
+		let messageElement = displayElements.messageElement;
 		let messageElementTmp = $(inputElement).nextAll().filter(".msg-tmp")[0];
 
 		if (wrapInputElement !== null) {
 			wrapInputElement.removeClass(this.wrapInput.whenError)
-			.addClass(this.wrapInput.whenSuccess);
+				.addClass(this.wrapInput.whenSuccess);
 		}
 
 		if (messageElement !== null) {
 			messageElement.removeClass(this.message.whenError)
-			.addClass(this.message.whenSuccess)
-			.html("");
+				.addClass(this.message.whenSuccess)
+				.html("");
 		}
 
 		if (messageElementTmp !== undefined) {
@@ -343,9 +343,9 @@ function Validate(formSelector, option = {}) {
 		for (let validFunct of validFunctOfInputs) {
 			errorMsg = validFunct(inputElement);
 
-			if (errorMsg !== undefined) { 
+			if (errorMsg !== undefined) {
 				this.isValid = false;
-				break; 
+				break;
 			}
 		}
 
@@ -361,7 +361,7 @@ function Validate(formSelector, option = {}) {
 				this.validateForInput(v);
 			});
 
-			if (! this.isValid) {
+			if (!this.isValid) {
 				e.preventDefault();
 			} else if (this.onSubmit !== null) {
 				e.preventDefault();
@@ -378,11 +378,11 @@ function Validate(formSelector, option = {}) {
 				let type = v.type;
 				let tagName = $(v).prop("tagName");
 
-				if ($(v).is($(e.target)) && type !== "radio" 
+				if ($(v).is($(e.target)) && type !== "radio"
 					&& type !== "checkbox" && tagName !== "SELECT") {
 					this.validateForInput(v);
-			}
-		});
+				}
+			});
 		});
 	}
 
