@@ -5,8 +5,180 @@ function Validate(formSelector, option = {}) {
 	// input element
 	this.inputElements = this.formElement.find(":input[name][rules][type!='button'][type!='submit']");
 
-	// message
+	// message rule 
+	this.messageRule = {
+		required: "truong nay khong duoc de trong",
+		min_length: "it nhat :v ki tu",
+		max_length: "nhieu nhat :v ki tu",
+		is_number: ":v khong phai la so",
+		min: "phai >= :v",
+		max: "phai <= :v",
+		between: "phai nam trong khoang :v - :v",
+		email: "email sai dinh dang",
+		password: "mat khau sai dinh dang",
+		checked: "chua chon",
+		phone: "so dien thoai sai dinh dang",
+		dob: "ngay sinh sai dinh dang",
+	}
 
+	// render message rule
+	this.renderMessage = {
+		required: (value) => {
+			let message = this.messageRule.required.split(":v");
+			let values = [value];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		min_length: (minLength) => {
+			let message = this.messageRule.min_length.split(":v");
+			let values = [minLength];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		max_length: (maxLength) => {
+			let message = this.messageRule.max_length.split(":v");
+			let values = [maxLength];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		is_number: (value) => {
+			let message = this.messageRule.is_number.split(":v");
+			let values = [value];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		min: (min) => {
+			let message = this.messageRule.min.split(":v");
+			let values = [min];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		max: (max) => {
+			let message = this.messageRule.max.split(":v");
+			let values = [max];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		between: (min, max) => {
+			let message = this.messageRule.between.split(":v");
+			let values = [min, max];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		email: (value) => {
+			let message = this.messageRule.email.split(":v");
+			let values = [value];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		password: (value) => {
+			let message = this.messageRule.password.split(":v");
+			let values = [value];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		checked: () => {
+			let message = this.messageRule.checked.split(":v");
+			let values = [];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		phone: (value) => {
+			let message = this.messageRule.phone.split(":v");
+			let values = [value];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+
+		dob: (value) => {
+			let message = this.messageRule.dob.split(":v");
+			let values = [value];
+
+			for (let i = 0; i < message.length - 1; ++i) {
+				if (values[i]) {
+					message[i] += values[i];
+				}
+			}
+
+			return message.join("");
+		},
+	}
 
 	// rule
 	this.validationRule = {
@@ -14,7 +186,7 @@ function Validate(formSelector, option = {}) {
 			let value = $(inputElement).val();
 
 			if (typeof value !== "string" || value.length === 0) {
-				return "khong duoc de trong";
+				return this.renderMessage.required(value);
 			}
 
 			return undefined;
@@ -28,7 +200,8 @@ function Validate(formSelector, option = {}) {
 					return undefined;
 				}
 
-				return (value.length >= minLength) ? undefined : `it nhat ${minLength} ki tu`;
+				return (value.length >= parseInt(minLength)) ? undefined 
+				: this.renderMessage.min_length(minLength);
 			}
 		},
 
@@ -40,14 +213,15 @@ function Validate(formSelector, option = {}) {
 					return undefined;
 				}
 
-				return (value.length <= maxLength) ? undefined : `nhieu nhat ${maxLength} ki tu`;
+				return (value.length <= parseInt(maxLength)) ? undefined 
+				: this.renderMessage.max_length(maxLength);
 			}
 		},
 
 		is_number: (inputElement) => {
 			let value = $(inputElement).val();
 
-			return !isNaN(value) ? undefined : `${value} khong phai la so`;
+			return !isNaN(value) ? undefined : this.renderMessage.is_number(value);
 		},
 
 		min: (min) => {
@@ -58,7 +232,7 @@ function Validate(formSelector, option = {}) {
 					return undefined;
 				}
 
-				return (value >= min) ? undefined : `phai >= ${min}`;
+				return (parseFloat(value) >= parseFloat(min)) ? undefined : this.renderMessage.min(min);
 			}
 		},
 
@@ -70,7 +244,8 @@ function Validate(formSelector, option = {}) {
 					return undefined;
 				}
 
-				return (value <= max) ? undefined : `phai <= ${max}`;
+				console.log(value + " " + max);
+				return (parseFloat(value) <= parseFloat(max)) ? undefined : this.renderMessage.max(max);
 			}
 		},
 
@@ -83,7 +258,8 @@ function Validate(formSelector, option = {}) {
 					return undefined;
 				}
 
-				return (value >= min && value <= max) ? undefined : `phai nam trong khoang tu ${min} - ${max}`;
+				return (parseFloat(value) >= parseFloat(min) 
+					&& parseFloat(value) <= parseFloat(max)) ? undefined : this.renderMessage.between(min, max);
 			}
 		},
 
@@ -96,7 +272,7 @@ function Validate(formSelector, option = {}) {
 
 			let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-			return regex.test(value) ? undefined : "email sai dinh dang";
+			return regex.test(value) ? undefined : this.renderMessage.email(value);
 		},
 
 		password: (inputElement) => {
@@ -108,7 +284,7 @@ function Validate(formSelector, option = {}) {
 
 			let regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
 
-			return regex.test(value) ? undefined : "mat khau sai dinh dang";
+			return regex.test(value) ? undefined : this.renderMessage.password(value);
 		},
 
 		checked: (inputElement) => {
@@ -118,7 +294,7 @@ function Validate(formSelector, option = {}) {
 				return undefined;
 			}
 
-			return "chua chon";
+			return this.renderMessage.checked();
 		},
 
 		phone: (inputElement) => {
@@ -130,7 +306,7 @@ function Validate(formSelector, option = {}) {
 
 			let regex = /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
 
-			return regex.test(value) ? undefined : "khong phai la so dien thoai";
+			return regex.test(value) ? undefined : this.renderMessage.phone(value);
 		},
 
 		dob: (inputElement) => {
@@ -142,7 +318,7 @@ function Validate(formSelector, option = {}) {
 
 			let regex = /^((0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-](19[0-9]{2}|2[0-9]{3}))|((0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-](19[0-9]{2}|2[0-9]{3}))|((19[0-9]{2}|2[0-9]{3})[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01]))$/;
 
-			return regex.test(value) ? undefined : "ngay sinh khong hop le";
+			return regex.test(value) ? undefined : this.renderMessage.dob(value);
 		}
 	}
 
@@ -186,6 +362,11 @@ function Validate(formSelector, option = {}) {
 			if ("onSubmit" in option) {
 				this.onSubmit = option.onSubmit;
 				console.log(this.onSubmit);
+			}
+
+			if ("customMessage" in option) {
+				Object.assign(this.messageRule, option.customMessage);
+				console.log(this.messageRule);
 			}
 		}
 

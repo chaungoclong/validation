@@ -21,7 +21,7 @@
 						<form action="" id="form1" method="get">
 							<div class="form-group">
 								<label for="name">Name</label>
-								<input type="text" name="name" class="form-control" id="name" rules="required|min_length:5">
+								<input type="text" name="name" class="form-control" id="name" rules="required|min_length:5|max_length:10">
 								<div class="msg"></div>
 							</div>
 
@@ -56,6 +56,12 @@
 							</div>
 
 							<div class="form-group">
+								<label for="min_max">Test Min-Max</label>
+								<input type="text" name="min_max" class="form-control" id="min_max"rules="required|min:100|max:1000|is_number">
+								<div class="msg"></div>
+							</div>
+
+							<div class="form-group">
 								<div class="form-check">
 									<label class="form-check-label">
 										<input type="checkbox" class="form-check-input" value="1" name="check[]" rules="checked">Option 1
@@ -73,17 +79,6 @@
 								</div>
 
 								<div class="msg"></div>
-							</div>
-
-							<div class="form-group">
-								<label for="select">Select list:</label>
-								<select class="form-control" id="select" name="select[]" multiple>
-									<option disabled>choose</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="4">4</option>
-								</select>
 							</div>
 
 							<div class="form-group">
@@ -124,6 +119,20 @@
 				selector: ".msg",
 				whenError: "alert alert-danger"
 			},
+			customMessage: {
+				required : "truong nay phai nhap",
+				min_length: "phai dai it nhat :v ki tu",
+				max_length: "do dai phai nho hon :v ki tu",
+				between: "phai > :v va < :v",
+				dob: ":v sai dinh dang",
+				min: ">= :v",
+				max: "<= :v",
+				email: "email sai roi",
+				phone: "so dien thoai sai kia",
+				checked: "phai chon kia",
+				password: "mat khau nay khong duoc dau",
+				is_number: "cai nay phai la so",
+			},
 			onSubmit: function() {
 				console.log(this.formElement);
 			}
@@ -140,6 +149,18 @@
 		// 	console.log($(":input[name='select[]']").val());
 		// })
 
+		// let str = "10 :v xyz :v ok";
+		// let strArr = str.split(":v");
+		// let values = [1];
+
+		// for (let i = 0; i < strArr.length; ++i) {
+		// 	if (values[i]) {
+		// 		strArr[i] += values[i];
+		// 	}
+		// 	console.log(strArr[i]);
+		// }
+
+		// console.log(strArr.join(""));
 	</script>
 </body>
 </html>
